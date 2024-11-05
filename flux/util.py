@@ -24,14 +24,14 @@ class ModelSpec:
     ae_url: str | None
 
 T5_URL = "https://weights.replicate.delivery/default/official-models/flux/t5/t5-v1_1-xxl.tar"
-T5_CACHE = "./model-cache/t5"
+T5_CACHE = os.getenv("FLUX_T5_CACHE", "./model-cache/t5")
 CLIP_URL = "https://weights.replicate.delivery/default/official-models/flux/clip/clip-vit-large-patch14.tar"
-CLIP_CACHE = "./model-cache/clip"
-SCHNELL_CACHE = "./model-cache/schnell/schnell.sft"
+CLIP_CACHE = os.getenv("FLUX_CLIP_CACHE", "./model-cache/clip")
+SCHNELL_CACHE = os.getenv("FLUX_SCHNELL_CACHE", "./model-cache/schnell/schnell.sft")
 SCHNELL_URL = "https://weights.replicate.delivery/default/official-models/flux/schnell/schnell.sft"
-DEV_CACHE = "./model-cache/dev/dev.sft"
+DEV_CACHE = os.getenv("FLUX_DEV_CACHE", "./model-cache/dev/dev.sft")
 DEV_URL = "https://weights.replicate.delivery/default/official-models/flux/dev/dev.sft"
-AE_CACHE = "./model-cache/ae/ae.sft"
+AE_CACHE = os.getenv("FLUX_AE_CACHE", "./model-cache/ae/ae.sft")
 AE_URL = "https://weights.replicate.delivery/default/official-models/flux/ae/ae.sft"
 
 configs = {
