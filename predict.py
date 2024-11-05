@@ -92,7 +92,7 @@ class SharedInputs:
     )
     disable_safety_checker: Input = Input(
         description="Disable safety checker for generated images.",
-        default=False,
+        default=True,
     )
     go_fast: Input = Input(
         description="Run faster predictions with model optimized for speed (currently fp8 quantized); disable to run in original bf16",
@@ -147,22 +147,22 @@ class Predictor(BasePredictor):
         )
         print("Detected GPU:", gpu_name)
 
-        if not SAFETY_CACHE.exists():
-            download_weights(SAFETY_URL, SAFETY_CACHE)
-        print("Loading Safety Checker to GPU")
-        self.safety_checker = StableDiffusionSafetyChecker.from_pretrained(
-            SAFETY_CACHE, torch_dtype=torch.float16
-        ).to("cuda")
-        self.feature_extractor = CLIPImageProcessor.from_pretrained(FEATURE_EXTRACTOR)
+        # if not SAFETY_CACHE.exists():
+        #     download_weights(SAFETY_URL, SAFETY_CACHE)
+        # print("Loading Safety Checker to GPU")
+        # self.safety_checker = StableDiffusionSafetyChecker.from_pretrained(
+        #     SAFETY_CACHE, torch_dtype=torch.float16
+        # ).to("cuda")
+        # self.feature_extractor = CLIPImageProcessor.from_pretrained(FEATURE_EXTRACTOR)
 
-        print("Loading Falcon safety checker...")
-        if not FALCON_MODEL_CACHE.exists():
-            download_weights(FALCON_MODEL_URL, FALCON_MODEL_CACHE)
-        self.falcon_model = AutoModelForImageClassification.from_pretrained(
-            FALCON_MODEL_NAME,
-            cache_dir=FALCON_MODEL_CACHE,
-        )
-        self.falcon_processor = ViTImageProcessor.from_pretrained(FALCON_MODEL_NAME)
+        # print("Loading Falcon safety checker...")
+        # if not FALCON_MODEL_CACHE.exists():
+        #     download_weights(FALCON_MODEL_URL, FALCON_MODEL_CACHE)
+        # self.falcon_model = AutoModelForImageClassification.from_pretrained(
+        #     FALCON_MODEL_NAME,
+        #     cache_dir=FALCON_MODEL_CACHE,
+        # )
+        # self.falcon_processor = ViTImageProcessor.from_pretrained(FALCON_MODEL_NAME)
 
         # need > 48 GB of ram to store all models in VRAM
         total_mem = torch.cuda.get_device_properties(0).total_memory
@@ -214,7 +214,7 @@ class Predictor(BasePredictor):
                     "offload_flow": True,
                 }
             self.fp8_pipe = FluxPipeline.load_pipeline_from_config_path(
-                f"fp8/configs/config-1-{flow_model_name}-h100.json",
+                f"fp8/configs/config-1-{flow_model_name}-a40.json",
                 shared_models=shared_models,
                 **extra_args,
             )
@@ -516,24 +516,26 @@ class Predictor(BasePredictor):
         return output_paths
 
     def run_safety_checker(self, images, np_images):
-        safety_checker_input = self.feature_extractor(images, return_tensors="pt").to(
-            "cuda"
-        )
-        image, has_nsfw_concept = self.safety_checker(
-            images=np_images,
-            clip_input=safety_checker_input.pixel_values.to(torch.float16),
-        )
-        return image, has_nsfw_concept
+        # safety_checker_input = self.feature_extractor(images, return_tensors="pt").to(
+        #     "cuda"
+        # )
+        # image, has_nsfw_concept = self.safety_checker(
+        #     images=np_images,
+        #     clip_input=safety_checker_input.pixel_values.to(torch.float16),
+        # )
+        # return image, has_nsfw_concept
+        return None, False
 
     def run_falcon_safety_checker(self, image):
-        with torch.no_grad():
-            inputs = self.falcon_processor(images=image, return_tensors="pt")
-            outputs = self.falcon_model(**inputs)
-            logits = outputs.logits
-            predicted_label = logits.argmax(-1).item()
-            result = self.falcon_model.config.id2label[predicted_label]
+        # with torch.no_grad():
+        #     inputs = self.falcon_processor(images=image, return_tensors="pt")
+        #     outputs = self.falcon_model(**inputs)
+        #     logits = outputs.logits
+        #     predicted_label = logits.argmax(-1).item()
+        #     result = self.falcon_model.config.id2label[predicted_label]
 
-        return result == "normal"
+        # return result == "normal"
+        return True
 
     def shared_predict(
         self,

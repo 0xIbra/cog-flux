@@ -292,8 +292,8 @@ def load_autoencoder(config: ModelSpec) -> AutoEncoder:
 class LoadedModels():
     flow: Optional[Flux]
     ae: Any
-    clip: Any 
-    t5: Any 
+    clip: Any
+    t5: Any
     config: Optional[ModelSpec]
 
 
@@ -319,7 +319,7 @@ def load_models_from_config(config: ModelSpec, shared_models: LoadedModels = Non
     else:
         clip, t5 = load_text_encoders(config)
         ae = load_autoencoder(config)
-        
+
     flow = load_flow_model(config)
 
     return LoadedModels(
