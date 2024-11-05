@@ -214,7 +214,7 @@ class Predictor(BasePredictor):
                     "offload_flow": True,
                 }
             self.fp8_pipe = FluxPipeline.load_pipeline_from_config_path(
-                f"fp8/configs/config-1-{flow_model_name}-a40.json",
+                f"fp8/configs/config-1-{flow_model_name}-a100.json",
                 shared_models=shared_models,
                 **extra_args,
             )
