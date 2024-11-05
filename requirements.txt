@@ -2,7 +2,6 @@ numpy<2
 torch==2.4.*
 einops==0.8.0
 fire==0.6.0
-huggingface-hub==0.24.3
 safetensors==0.4.3
 sentencepiece==0.2.0
 transformers==4.43.3
@@ -13,3 +12,5 @@ loguru==0.7.2
 pybase64==1.4.0
 pydash==8.0.3
 pydantic
+huggingface-hub==0.24.3
+hf-transfer
