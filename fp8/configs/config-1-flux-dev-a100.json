@@ -31,7 +31,7 @@
     "repo_flow": "flux1-dev.sft",
     "repo_ae": "ae.sft",
     "text_enc_max_length": 512,
-    "text_enc_path": "/volume/flux.1-dev/t5",
+    "text_enc_path": "/volume/flux.1-dev/t5-v1_1-xxl",
     "text_enc_device": "cuda:0",
     "ae_device": "cuda:0",
     "flux_device": "cuda:0",
