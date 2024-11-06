@@ -262,24 +262,16 @@ class Predictor(BasePredictor):
 
         self.compile_run = True
 
-        self.base_predict(
-            prompt="a cool dog",
-            aspect_ratio="1:1",
-            num_outputs=1,
-            num_inference_steps=self.num_steps,
-            guidance=3.5,
-            seed=123,
-        )
-
         for k in ["1:1", "4:3", "3:4", "16:9", "9:16"]:
             width, height = self.aspect_ratio_to_width_height(k)
             self.base_predict(
                 prompt="godzilla!",
                 width=width,
                 height=height,
-                num_steps=28,
+                num_steps=self.num_steps,
                 guidance=3.0,
                 num_outputs=1,
+                seed=42,
             )
 
         print("compiled in ", time.time() - st)
