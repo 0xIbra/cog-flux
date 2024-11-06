@@ -268,7 +268,7 @@ class Predictor(BasePredictor):
                 prompt="godzilla!",
                 width=width,
                 height=height,
-                num_steps=self.num_steps,
+                num_inference_steps=self.num_steps,
                 guidance=3.0,
                 num_outputs=1,
                 seed=42,
