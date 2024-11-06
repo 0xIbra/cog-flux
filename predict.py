@@ -213,8 +213,10 @@ class Predictor(BasePredictor):
                     "offload_vae": True,
                     "offload_flow": True,
                 }
+
+            config_file_path = os.getenv("FLUX_DEV_CONFIG_PATH", f"fp8/configs/config-1-{flow_model_name}-h100.json")
             self.fp8_pipe = FluxPipeline.load_pipeline_from_config_path(
-                f"fp8/configs/config-1-{flow_model_name}-a100.json",
+                config_file_path,
                 shared_models=shared_models,
                 **extra_args,
             )
